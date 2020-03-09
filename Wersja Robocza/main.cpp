@@ -54,7 +54,7 @@ Student wczytaj_student(Student &student, Baza &baza)
     return student;
 }
 
-void load_student (ifstream &file, Baza &baza)
+/*void load_student (ifstream &file, Baza &baza)
 {
     for (int i=0; i<baza.grupa.size();i++)
     {
@@ -87,20 +87,22 @@ void load_student (ifstream &file, Baza &baza)
         }
         j=j+4;
     }
-}
+}*/
 
 void display_student (Student &student)
 {
-    cout << student.imie<<endl;
-    cout << student.nazwisko<<endl;
+    cout << student.imie << endl;
+    cout << student.nazwisko << endl;
     if (student.plec==0)
     {
-        cout << "Mezczyzna"<<endl;
+        cout << "Mezczyzna" << endl;
     }
     else
     {
-        cout << "Kobieta"<<endl;
+        cout << "Kobieta" << endl;
     }
+    cout << student.pesel << endl;
+    cout << student.indeks << endl;
 }
 
 void display_all_students (vector<Student>&grupa, int n)
@@ -111,7 +113,7 @@ void display_all_students (vector<Student>&grupa, int n)
     }
 }
 
-void save_students(ofstream &file, Baza baza)
+/*void save_students(ofstream &file, Baza baza)
 {
     for (int i=0; i<baza.grupa.size();i++)
     {
@@ -126,7 +128,7 @@ void save_students(ofstream &file, Baza baza)
         }
         file <<baza.grupa[i].pesel << endl << baza.grupa[i].indeks<<endl;
     }
-}
+}*/
 
 void remove_student (Baza &baza, string indeks)
 {
@@ -136,8 +138,9 @@ void remove_student (Baza &baza, string indeks)
 
 int main() {
     Student student1, student2, student3;
-    ifstream full;
-    ofstream empty;
+    //ifstream full;
+    //ofstream empty;
+    student1.imie="Adam";
     student1.imie="Adam";
     student1.nazwisko="Nowak";
     student1.plec=0;
@@ -160,8 +163,8 @@ int main() {
     baza.grupa.push_back(student1);
     baza.grupa.push_back(student2);
     add_student(student3, baza);
-    save_students(empty, baza);
-    load_student(full, baza);
+    //save_students(empty, baza);
+    //load_student(full, baza);
     display_all_students(baza.grupa, 3);
 
     return 0;
