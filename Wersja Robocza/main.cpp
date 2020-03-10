@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <fstream>
+
 
 using namespace std;
 
@@ -169,37 +169,65 @@ void remove_student (Baza &baza, string indeks)
 
 void menu (Baza &baza)
 {
-
+    int opcja = 1;
+    string nr_indeksu;
+    do
+        {
+        cout << "Wybierz co zrobic" << endl;
+        cout << "1 - Wczytaj liste studnentow" << endl;
+        cout << "2 - Wyswietl wszystkich studemtow na liscie" << endl;
+        cout << "3 - Dodaj studenta do listy" << endl;
+        cout << "4 - Usun studenta z listy" << endl;
+        cout << "5 - Znajdz studenta z listy" << endl;
+        cout << "6 - Zapisz liste studentow" << endl;
+        cout << "7 - Wyjscie z programu" << endl;
+        cin >> opcja;
+        switch (opcja)
+            {
+                case 1:
+                    {
+                        //load_students(baza);
+                        break;
+                    }
+                case 2:
+                    {
+                        display_all_students(baza);
+                        break;
+                    }
+                case 3:
+                    {
+                        add_student(baza);
+                        break;
+                    }
+                case 4:
+                    {
+                        remove_student(baza,nr_indeksu);
+                        break;
+                    }
+                case 5:
+                    {
+                        cout << "Podaj indeks szukanego studenta" << endl;
+                        cin >> nr_indeksu;
+                        cout << "Student ma nr: " << find_student(baza,nr_indeksu) << endl;
+                        break;
+                    }
+                case 6:
+                    {
+                        //save_students(baza);
+                        break;
+                    }
+                default:
+                    {
+                    opcja=7;22222
+                    break;
+                    }
+            }
+        }
+    while (opcja!=7);
 }
 
 int main() {
-    Student student1, student2, student3;
-    //ifstream full;
-    //ofstream empty;
-    student1.imie="Adam";
-    student1.nazwisko="Nowak";
-    student1.plec=0;
-    student1.pesel = "00256954682";
-    student1.indeks = "253068";
-
-    student2.imie="Agnieszka";
-    student2.nazwisko="Kowalska";
-    student2.plec=1;
-    student2.pesel =  "0024654682";
-    student2.indeks = "253025";
-
-    student3.imie="Jan";
-    student3.nazwisko="Zamek";
-    student3.plec=0;
-    student3.pesel = "0024165682";
-    student3.indeks = "253099";
-    vector<Student>grupa = {student1, student2};
-    Baza baza;
-    baza.grupa.push_back(student1);
-    baza.grupa.push_back(student2);
-    add_student(student3, baza);
-    //save_students(empty, baza);
-    //load_student(full, baza);
-    display_all_students(baza.grupa, 3);
-
+    Baza baza{{},0};
+    menu(baza);
     return 0;
+            }
