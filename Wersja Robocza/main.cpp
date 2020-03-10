@@ -7,21 +7,22 @@ using namespace std;
 
 struct Student
 {
-    string imie, nazwisko, pesel, indeks;
+    string imie, nazwisko, pesel, indeks,nr;
     bool plec ; //0-meżczyzna 1-kobieta
 };
 
 struct Baza
 {
-    vector<Student>grupa;
+    Student baza[100];
+    int ilosc;
 };
 
-int find_student (Baza grupa1, string indeks)
+int find_student (Baza &baza, string indeks)
 {
     int miejsce;
-    for (int i=0;i<100;i++)
+    for (int i=0;baza.ilosc;i++)
     {
-        if (grupa1.grupa[i].indeks==indeks){
+        if (baza.baza[i].indeks==indeks){
             miejsce=i;
             return miejsce;
         }
@@ -29,29 +30,47 @@ int find_student (Baza grupa1, string indeks)
     return miejsce=-1;
 }
 
-void add_student (Student &student, Baza &baza)
-{
-    baza.grupa.push_back(student);
-}
-
-Student wczytaj_student(Student &student, Baza &baza)
+/*Student wczytaj_student(Baza &baza)
 {
     cout << "Podaj imie studenta: ";
-    cin >> student.imie;
+    cin >> baza.baza[baza.ilosc].imie;
     cout << ""<<endl;
     cout << "Podaj nazwisko studenta: ";
-    cin >> student.nazwisko;
+    cin >> baza.baza[baza.ilosc].nazwisko;
     cout << ""<<endl;
     cout << "Podaj plec studenta (0-meżczyzna 1-kobieta): ";
-    cin >> student.plec;
+    cin >> baza.baza[baza.ilosc].plec;
     cout << ""<<endl;
     cout << "Podaj nr pesel studenta: ";
-    cin >> student.pesel;
+    cin >> baza.baza[baza.ilosc].pesel;
     cout << ""<<endl;
     cout << "Podaj nr ineksu studenta: ";
-    cin >> student.indeks;
+    cin >> baza.baza[baza.ilosc].indeks;
     cout << ""<<endl;
     return student;
+}*/
+
+void add_student (Baza &baza)
+{
+    if (baza.ilosc>100)
+        cout << "Baza studentow pelna!";
+    else
+    {
+        baza.baza[baza.ilosc].nr=baza.ilosc+1;
+        cout << "Podaj imie: " << endl;
+        cin>>baza.baza[baza.ilosc].imie;
+        cout << "Podaj nazwisko: " << endl;
+        cin>>baza.baza[baza.ilosc].nazwisko;
+        cout << "Podaj plec(0-mezczyzna 1-kobieta): " << endl;
+        cin>>baza.baza[baza.ilosc].plec;
+        cout << "Podaj pesel: " << endl;
+        cin>>baza.baza[baza.ilosc].pesel;
+        cout << "Podaj indeks: " << endl;
+        cin >> baza.baza[baza.ilosc].indeks;
+        baza.ilosc++;
+    }
+
+
 }
 
 /*void load_student (ifstream &file, Baza &baza)
@@ -89,27 +108,40 @@ Student wczytaj_student(Student &student, Baza &baza)
     }
 }*/
 
-void display_student (Student &student)
+void display_student (Baza &baza, int miejsce)
 {
-    cout << student.imie << endl;
-    cout << student.nazwisko << endl;
-    if (student.plec==0)
+    cout << baza.baza[miejsce-1].nr<<"."<<endl;
+    cout << "Imie studenta: "<< baza.baza[miejsce-1].imie<<endl;
+    cout << "Nazwisko studenta: " << baza.baza[miejsce-1].nazwisko<<endl;
+    if (baza.baza[miejsce-1].plec==0)
     {
-        cout << "Mezczyzna" << endl;
+        cout << "Plec" << "Mezczyzna" << endl;
     }
     else
     {
         cout << "Kobieta" << endl;
     }
-    cout << student.pesel << endl;
-    cout << student.indeks << endl;
+    cout << "Nr pesel: " << baza.baza[miejsce-1].pesel<<endl;
+    cout << "Nr indeksu: " << baza.baza[miejsce-1].indeks<<endl;
 }
 
-void display_all_students (vector<Student>&grupa, int n)
+void display_all_students (Baza &baza)
 {
-    for (int i=0;i<n;i++)
+    for (int i=0;i<baza.ilosc;i++)
     {
-        display_student(grupa[i]);
+        cout << baza.baza[i].nr<<"."<<endl;
+        cout << "Imie studenta: "<< baza.baza[i].imie<<endl;
+        cout << "Nazwisko studenta: " << baza.baza[i].nazwisko<<endl;
+        if (baza.baza[i].plec==0)
+        {
+            cout << "Plec" << "Mezczyzna" << endl;
+        }
+        else
+        {
+            cout << "Kobieta" << endl;
+        }
+        cout << "Nr pesel: " << baza.baza[i].pesel<<endl;
+        cout << "Nr indeksu: " << baza.baza[i].indeks<<endl;
     }
 }
 
@@ -132,15 +164,18 @@ void display_all_students (vector<Student>&grupa, int n)
 
 void remove_student (Baza &baza, string indeks)
 {
-    int n=find_student(baza, indeks);
-    baza.grupa.erase(baza.grupa.begin()+n);
+
+}
+
+void menu (Baza &baza)
+{
+
 }
 
 int main() {
     Student student1, student2, student3;
     //ifstream full;
     //ofstream empty;
-    student1.imie="Adam";
     student1.imie="Adam";
     student1.nazwisko="Nowak";
     student1.plec=0;
@@ -168,4 +203,3 @@ int main() {
     display_all_students(baza.grupa, 3);
 
     return 0;
-}
