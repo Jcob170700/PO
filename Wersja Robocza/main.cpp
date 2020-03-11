@@ -1,14 +1,15 @@
 #include <iostream>
-#include <vector>
 #include <string>
+#include <fstream>
 
 
 using namespace std;
 
 struct Student
 {
-    string imie, nazwisko, pesel, indeks,nr;
-    bool plec ; //0-meżczyzna 1-kobieta
+    int nr;
+    string imie, nazwisko, pesel, indeks, plec;
+
 };
 
 struct Baza
@@ -30,25 +31,6 @@ int find_student (Baza &baza, string indeks)
     return miejsce=-1;
 }
 
-/*Student wczytaj_student(Baza &baza)
-{
-    cout << "Podaj imie studenta: ";
-    cin >> baza.baza[baza.ilosc].imie;
-    cout << ""<<endl;
-    cout << "Podaj nazwisko studenta: ";
-    cin >> baza.baza[baza.ilosc].nazwisko;
-    cout << ""<<endl;
-    cout << "Podaj plec studenta (0-meżczyzna 1-kobieta): ";
-    cin >> baza.baza[baza.ilosc].plec;
-    cout << ""<<endl;
-    cout << "Podaj nr pesel studenta: ";
-    cin >> baza.baza[baza.ilosc].pesel;
-    cout << ""<<endl;
-    cout << "Podaj nr ineksu studenta: ";
-    cin >> baza.baza[baza.ilosc].indeks;
-    cout << ""<<endl;
-    return student;
-}*/
 
 void add_student (Baza &baza)
 {
@@ -61,7 +43,7 @@ void add_student (Baza &baza)
         cin>>baza.baza[baza.ilosc].imie;
         cout << "Podaj nazwisko: " << endl;
         cin>>baza.baza[baza.ilosc].nazwisko;
-        cout << "Podaj plec(0-mezczyzna 1-kobieta): " << endl;
+        cout << "Podaj plec (mezczyzna/kobieta): " << endl;
         cin>>baza.baza[baza.ilosc].plec;
         cout << "Podaj pesel: " << endl;
         cin>>baza.baza[baza.ilosc].pesel;
@@ -73,56 +55,56 @@ void add_student (Baza &baza)
 
 }
 
-/*void load_student (ifstream &file, Baza &baza)
+void load_students (Baza &baza)
 {
-    for (int i=0; i<baza.grupa.size();i++)
-    {
-        int n=0;
-        int j=0;
-        for (;n==j;n++)
-        {
-            getline(file, baza.grupa[i].imie);
-        }
-        for (; n==j+1;n++)
-        {
-            getline (file, baza.grupa[i].nazwisko);
-        }
-        for (; n==j+2;n++)
-        {
-            string plec;
-            getline (file, plec);
-            if (plec =="Kobieta")
-                baza.grupa[i].plec= true;
-            if (plec == "Mezczyzna")
-                baza.grupa[i].plec= false;
-        }
-        for (;n==j+3;n++)
-        {
-            getline (file, baza.grupa[i].pesel );
-        }
-        for (;n==j+4;n++)
-        {
-            getline (file, baza.grupa[i].pesel);
-        }
-        j=j+4;
+    fstream plik;
+    bool plik_domyslny;
+    string linia, sciezka;
+    int i=0;
+    int nr=1;
+    cout << "Wczytac domyslny plik?(0-nie/1-tak): " << endl;
+    cin >> plik_domyslny;
+    if(plik_domyslny==1) {
+        plik.open("C:\\Users\\Kuba\\CLionProjects\\PO\\Wersja Robocza\\baza.txt", ios::in);
+    } else{
+        cout << "Podaj sciezke do pliku z ktorego chcesz wczytac dane: " << endl;
+        cin >> sciezka;
+        plik.open(sciezka, ios::in);
     }
-}*/
+    if(!plik.good())
+    {
+        cout << "Plik nie istnieje" << endl;
+        exit(0);
+    }
+    while(getline(plik,linia))
+    {
+        baza.baza[i].imie=linia;
+        getline(plik,linia);
+        baza.baza[i].nazwisko=linia;
+        getline(plik,linia);
+        baza.baza[i].plec=linia;
+        getline(plik,linia);
+        baza.baza[i].pesel=linia;
+        getline(plik,linia);
+        baza.baza[i].indeks=linia;
+        baza.baza[i].nr=nr;
+        i++;
+        nr++;
+    }
+    baza.ilosc=i;
+    plik.close();
+    cout << "Baza zostala pomyslnie wczytana" << endl;
+}
+
 
 void display_student (Baza &baza, int miejsce)
 {
-    cout << baza.baza[miejsce-1].nr<<"."<<endl;
-    cout << "Imie studenta: "<< baza.baza[miejsce-1].imie<<endl;
-    cout << "Nazwisko studenta: " << baza.baza[miejsce-1].nazwisko<<endl;
-    if (baza.baza[miejsce-1].plec==0)
-    {
-        cout << "Plec" << "Mezczyzna" << endl;
-    }
-    else
-    {
-        cout << "Kobieta" << endl;
-    }
-    cout << "Nr pesel: " << baza.baza[miejsce-1].pesel<<endl;
-    cout << "Nr indeksu: " << baza.baza[miejsce-1].indeks<<endl;
+    cout << baza.baza[miejsce-1].nr << "." << endl;
+    cout << "Imie studenta: "<< baza.baza[miejsce-1].imie << endl;
+    cout << "Nazwisko studenta: " << baza.baza[miejsce-1].nazwisko << endl;
+    cout << "Plec: " << baza.baza[miejsce-1].plec << endl;
+    cout << "Nr pesel: " << baza.baza[miejsce-1].pesel << endl;
+    cout << "Nr indeksu: " << baza.baza[miejsce-1].indeks << endl;
 }
 
 void display_all_students (Baza &baza)
@@ -130,45 +112,69 @@ void display_all_students (Baza &baza)
     for (int i=0;i<baza.ilosc;i++)
     {
         cout << baza.baza[i].nr<<"."<<endl;
-        cout << "Imie studenta: "<< baza.baza[i].imie<<endl;
-        cout << "Nazwisko studenta: " << baza.baza[i].nazwisko<<endl;
-        if (baza.baza[i].plec==0)
-        {
-            cout << "Plec" << "Mezczyzna" << endl;
-        }
-        else
-        {
-            cout << "Kobieta" << endl;
-        }
-        cout << "Nr pesel: " << baza.baza[i].pesel<<endl;
-        cout << "Nr indeksu: " << baza.baza[i].indeks<<endl;
+        cout << "Imie studenta: "<< baza.baza[i].imie << endl;
+        cout << "Nazwisko studenta: " << baza.baza[i].nazwisko << endl;
+        cout << "Plec: " << baza.baza[i].plec << endl;
+        cout << "Nr pesel: " << baza.baza[i].pesel << endl;
+        cout << "Nr indeksu: " << baza.baza[i].indeks << endl;
     }
 }
 
-/*void save_students(ofstream &file, Baza baza)
-{
-    for (int i=0; i<baza.grupa.size();i++)
+void save_students(Baza baza) {
+    fstream plik;
+    bool plik_domyslny;
+    string sciezka;
+    cout << "Zapsiac baze w domyslnym pliku?(0-nie/1-tak)" << endl;
+    cin >> plik_domyslny;
+    if (plik_domyslny==1)
+        {
+            plik.open("C:\\Users\\Kuba\\CLionProjects\\PO\\Wersja Robocza\\baza.txt", ios::out);
+        }
+    else
+        {
+            cout << "Podaj sciezke do pliku w ktorym chcesz zapisac baze studemtow: " << endl;
+            cin >> sciezka;
+            plik.open(sciezka, ios::out);
+        }
+    for(int i=0; i<baza.ilosc; i++)
     {
-        file << baza.grupa[i].imie <<endl << baza.grupa[i].nazwisko<<endl;
-        if (baza.grupa[i].plec==0)
-        {
-            file << "Mezczyzna"<< endl;
-        }
-        else
-        {
-            file << "Kobieta" <<endl;
-        }
-        file <<baza.grupa[i].pesel << endl << baza.grupa[i].indeks<<endl;
+        plik << baza.baza[i].imie << endl;
+        plik << baza.baza[i].nazwisko << endl;
+        plik << baza.baza[i].plec << endl;
+        plik << baza.baza[i].pesel << endl;
+        plik << baza.baza[i].indeks << endl;
     }
-}*/
+    plik.close();
 
-void remove_student (Baza &baza, string indeks)
+}
+
+void remove_student (Baza &baza)
 {
-
+    int nr;
+    cout << "Podaj numer studenta, ktorego chcesz usunac z bazy" << endl;
+    cin >> nr;
+    if (nr>baza.ilosc)
+        {
+            cout << "Nie ma takiego numeru na liscie!" << endl;
+        }
+    else
+        {
+            for (int i=nr-1;i<baza.ilosc-1;i++)
+                {
+                    baza.baza[i].nr=i+1;
+                    baza.baza[i].imie=baza.baza[i+1].imie;
+                    baza.baza[i].nazwisko=baza.baza[i+1].nazwisko;
+                    baza.baza[i].plec=baza.baza[i+1].plec;
+                    baza.baza[i].pesel=baza.baza[i+1].pesel;
+                    baza.baza[i].indeks=baza.baza[i+1].indeks;
+                }
+            baza.ilosc--;
+        }
 }
 
 void menu (Baza &baza)
 {
+    int nr=0;
     int opcja = 1;
     string nr_indeksu;
     do
@@ -179,14 +185,15 @@ void menu (Baza &baza)
         cout << "3 - Dodaj studenta do listy" << endl;
         cout << "4 - Usun studenta z listy" << endl;
         cout << "5 - Znajdz studenta z listy" << endl;
-        cout << "6 - Zapisz liste studentow" << endl;
-        cout << "7 - Wyjscie z programu" << endl;
+        cout << "6 - Wyswietl studenta z listy" << endl;
+        cout << "7 - Zapisz liste studentow" << endl;
+        cout << "8 - Wyjscie z programu" << endl;
         cin >> opcja;
         switch (opcja)
             {
                 case 1:
                     {
-                        //load_students(baza);
+                        load_students(baza);
                         break;
                     }
                 case 2:
@@ -201,7 +208,7 @@ void menu (Baza &baza)
                     }
                 case 4:
                     {
-                        remove_student(baza,nr_indeksu);
+                        remove_student(baza);
                         break;
                     }
                 case 5:
@@ -213,12 +220,20 @@ void menu (Baza &baza)
                     }
                 case 6:
                     {
-                        //save_students(baza);
+                        cout << "Podaj nr studenta ktorego chcesz wyswietlic";
+                        cin >> nr;
+                        cout << "" << endl;
+                        display_student(baza,nr);
+                        break;
+                    }
+                    case 7:
+                    {
+                        save_students(baza);
                         break;
                     }
                 default:
                     {
-                    opcja=7;22222
+                    opcja=7;
                     break;
                     }
             }
