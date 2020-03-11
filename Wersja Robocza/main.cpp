@@ -17,7 +17,6 @@ struct Baza
     Student baza[100];
     int ilosc;
 };
-
 int find_student (Baza &baza, string indeks)
 {
     int miejsce;
@@ -25,7 +24,7 @@ int find_student (Baza &baza, string indeks)
     {
         if (baza.baza[i].indeks==indeks){
             miejsce=i;
-            return miejsce;
+            return miejsce+1;
         }
     }
     return miejsce=-1;
@@ -241,8 +240,9 @@ void menu (Baza &baza)
     while (opcja!=7);
 }
 
-int main() {
+int main()
+{
     Baza baza{{},0};
     menu(baza);
     return 0;
-            }
+}
